@@ -15,4 +15,25 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.1.10</version>
+        <configuration>
+          <targetClasses>
+            <param>edu.utexas.ece.moez.smallMaven.*</param>
+          </targetClasses>
+          <targetTests>
+            <param>edu.utexas.ece.moez.smallMaven.*</param>
+          </targetTests>
+          <outputFormats>
+            <outputFormat>CSV</outputFormat>
+            <outputFormat>HTML</outputFormat>
+          </outputFormats>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
