@@ -6,24 +6,26 @@ import org.junit.Test;
 public class AppTest
 {
 	@Test
-	public void testAdd()
+	public void testAdd1()
 	{
 		int a=3, b=4, expected=a+b, actual;
-		actual = App.addOf(a,b);
+		actual = App.add1(a,b);
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void concateTest()
+	public void testAdd2()
 	{
-		String suffix="Dr. ", prefix="Xivago", expected=suffix+prefix, actual;
-		actual = App.concatenate(suffix, prefix);
+		int a=-1, b=1, expected=a+b, actual;
+		actual = App.add2(a,b);
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testGreeting()
+	public void testAdd3()
 	{
-		assertEquals(App.HELLO, App.greetingMessage());
+		int a=3, b=-4, expected=a+b, actual;
+		actual = App.add3(a,b);
+		assertEquals(expected, actual);
 	}
 }

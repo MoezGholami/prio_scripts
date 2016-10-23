@@ -9,18 +9,7 @@ public class App
 
 	public static final String HELLO = "hello!";
 
-    public static int addOf(int a, int b)
-	{
-		return a+b;
-	}
-
-	public static String concatenate(String a, String b)
-	{
-		return a+b;
-	}
-
-	public static String greetingMessage()
-	{
-		return HELLO;
-	}
+    public static int add1(int a, int b) {return a+b;}
+	public static int add2(int a, int b) {return a+b;}
+	public static int add3(int a, int b) {return a+b;}
 }
