@@ -1,0 +1,7 @@
+language: bash
+
+jdk:
+        - oraclejdk8
+
+script:
+        - bash travis_run.sh

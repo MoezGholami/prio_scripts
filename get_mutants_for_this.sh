@@ -66,6 +66,7 @@ send_result()
 	git config --local user.name $result_repo_commiter_name
 	git config --local user.email $result_repo_commiter_email
 	git config --local user.password $result_repo_commiter_pass
+	git config remote.origin.url https://$result_repo_commiter_name:$result_repo_commiter_pass@github.com/Moezgholami/$results_dir.git
 	git add $result_file_name
 	git commit -am "$result_file_name"
 	git push origin master
