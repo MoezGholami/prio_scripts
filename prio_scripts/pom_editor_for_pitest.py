@@ -52,7 +52,7 @@ def init_constants():
 	'<plugin>									\n\
 		<groupId>org.pitest</groupId>						\n\
 		<artifactId>pitest-maven</artifactId>					\n\
-		<version>1.0.0</version>						\n\
+		<version>1.1.10</version>						\n\
 		<configuration>								\n\
 			<targetClasses>							\n\
 				<param>ROOT_PREFIX_OF_PROJECT.*</param>			\n\
@@ -65,13 +65,6 @@ def init_constants():
 				<outputFormat>HTML</outputFormat>			\n\
 			</outputFormats>						\n\
 		</configuration>							\n\
-		<dependencies>								\n\
-			<dependency>							\n\
-				<groupId>org.pitest.plugins</groupId>			\n\
-				<artifactId>pitest-all-tests-plugin</artifactId>	\n\
-				<version>0.1-SNAPSHOT</version>				\n\
-			</dependency>							\n\
-		</dependencies>								\n\
 	</plugin>'
 
 main()
