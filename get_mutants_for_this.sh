@@ -37,7 +37,7 @@ generate_mutation_table()
 	echo "generating mutation table ..."
 	rm -rf target
 	mvn test > /dev/null
-	mvn org.pitest:pitest-maven:mutationCoverage
+	mvn org.pitest:pitest-maven:mutationCoverage || echo "error"
 	echo "done!"
 }
 
