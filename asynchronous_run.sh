@@ -50,13 +50,31 @@ make_travis_run()
 	rm -rf $temp_repo_name
 }
 
+sync_travis()
+{
+	local travis_ret_val=0
+	set +e
+
+	travis sync
+	travis_ret_val=$?
+	while [[ $travis_ret_val -ne 0 ]]
+	do
+		sleep 1
+		echo "travis sync failed, retrying ..."
+		travis sync
+		travis_ret_val=$?
+	done
+
+	set -e
+}
+
 main()
 {
 	set -e
 
 	travis_login
 	create_github_repo
-	travis sync
+	sync_travis
 	travis enable -r $github_username/$temp_repo_name
 	make_travis_run
 	travis logout
