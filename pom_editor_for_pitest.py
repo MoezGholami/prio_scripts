@@ -32,7 +32,7 @@ def insert_pitest_plugin(root, pitest_plugin_text):
 
 def make_pitest_conf_text(prefix_of_project):
 	global pitest_plugin
-	return pitest_plugin.replace('ROOT_PREFIX_OF_PROJECT', prefix_of_project)
+	return pitest_plugin.replace('ROOT_PREFIX_OF_PROJECT', 'org.apache')
 
 def get_project_root_prefix(root):
 	return root.find('groupId').text.strip()
