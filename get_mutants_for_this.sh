@@ -61,7 +61,8 @@ send_result()
 	local results_dir=$(basename "$result_repo")
 
 	git clone "$result_repo"
-	mv $(find target/pit-reports -name mutations.csv) $results_dir/$result_file_name
+	cat "extra_result.csv" >> $(find target/pit-reports -name mutations.csv)
+	sort -u $(find target/pit-reports -name mutations.csv) > $results_dir/$result_file_name
 	cd $results_dir
 	git config --local user.name $result_repo_commiter_name
 	git config --local user.email $result_repo_commiter_email
