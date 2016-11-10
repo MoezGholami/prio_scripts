@@ -1,34 +1,47 @@
 #!/bin/bash
 
+#This is the heart of mutation table calculation
+#It calculates the mutation table for the current project
+#Then based on the constant parameters, the results will be pushed to results repository on github
 #In order to make this work, the folder prio_scripts must exist in project root directory
+#Running this script recuires internet connection, git command and maven (mvn) command, and in fact jdk
+#It gets an optional main parameter indicating the name of the experiment.
+#
+#The result file will be pushed with name containing experiment name, target project name,
+#and SHA of desired snapshot of the project.
 
-pom_manipulator_python_file_path="./prio_scripts/pom_editor_for_pitest.py"
-result_repo="https://github.com/MoezGholami/prio_results"
-result_repo_commiter_name="prioresultposter"
-result_repo_commiter_email="prioresultposte@30mail.ir"
-result_repo_commiter_pass="abcdefg1234567"
+#Redundancy:
+#In send result function we are using some parts of url of results repo
 
-get_plugins()
+. $(find . -name constant_values.sh)
+
+experiment_name="defaultExperimentName"
+if [ -n "$1" ]; then experiment_name=$1; fi
+
+echo $experiment_name
+
+get_desired_pitest()
 {
-	echo "cloning necessary pitest plugins ..."
-	git clone https://github.com/szpak/pitest-plugins > /dev/null 2>&1
+	echo "cloning desired pitest version ..."
+	git clone $desired_pitest_repo_url > /dev/null 2>&1
 	echo "done!"
 }
 
 manipulate_pom()
 {
 	echo "manipulating pom.xml"
-	python "$pom_manipulator_python_file_path"
+	local project_name=$(basename "$PWD")
+	cp prio_scripts/pom_files/$project_name.xml ./pom.xml
 	echo "done!"
 }
 
-install_plugin()
+install_desired_pitest()
 {
-	echo "installing plugins ..."
-	cd pitest-plugins
-	mvn install > /dev/null 2>&1
+	echo "installing desired pitest version ..."
+	cd pitest
+	mvn install -DskipTests > /dev/null 2>&1
 	cd ..
-	rm -rf pitest-plugins
+	rm -rf pitest
 	echo "done!"
 }
 
@@ -41,15 +54,15 @@ generate_mutation_table()
 	echo "done!"
 }
 
-handle_necessary_plugins()
+handle_desired_pitest()
 {
-	echo "looking for pitest plugins..."
-	if [ -d ~/.m2/repository/org/pitest/plugins/pitest-all-tests-plugin ]
+	echo "looking for desired pitest..."
+	if [ -d ~/.m2/repository/org/pitest/pitest/$desired_pitest_version ]
 	then
 		echo "already installed"
 	else
-		get_plugins
-		install_plugin
+		get_desired_pitest
+		install_desired_pitest
 	fi
 }
 
@@ -57,12 +70,11 @@ send_result()
 {
 	local this_commit_hash=$(git rev-parse HEAD)
 	local this_project_name=$(basename $(git remote -v | head -n1 | awk '{print $2}' | sed -e 's,.*:\(.*/\)\?,,' -e 's/\.git$//'))
-	local result_file_name=$this_project_name"_"$this_commit_hash".csv"
+	local result_file_name=$experiment_name"_"$this_project_name"_"$this_commit_hash".csv"
 	local results_dir=$(basename "$result_repo")
 
 	git clone "$result_repo"
-	cat "extra_result.csv" >> $(find target/pit-reports -name mutations.csv)
-	sort -u $(find target/pit-reports -name mutations.csv) > $results_dir/$result_file_name
+	mv $(find target/pit-reports -name mutations.csv) $results_dir/$result_file_name
 	cd $results_dir
 	git config --local user.name $result_repo_commiter_name
 	git config --local user.email $result_repo_commiter_email
@@ -80,7 +92,7 @@ main()
 	set -e
 
 	manipulate_pom
-	handle_necessary_plugins
+	handle_desired_pitest
 	generate_mutation_table
 	send_result
 

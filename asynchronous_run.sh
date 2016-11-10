@@ -1,13 +1,27 @@
 #!/bin/bash
 
-github_username="prioresultposter"
-github_email="prioresultposte@30mail.ir"
-github_password="abcdefg1234567"
+#This script asynchronously calculates mutation table for a git project at specific commit on Travis CI
+#Result will be pushed to a github repository.
+#In order to have less redundancy, please read the constant_values.sh file.
+#
+#This script gets three arguments in command line.
+#
+#First one is the experiment name; which should not contain any white space
+#
+#Second one is the URL (ssh/http) of target git project.
+#It should be accessible from Travis server (e.g. not local server).
+#
+#Third is the prefix of SHA of desired commit of target project to calculate its mutation table.
+#
+#This script presumes that git and travis are available as commands. Also it needs internet connection.
 
-temp_repo_name=$( echo $(date) $(date +%s%N) | tr -cd '[[:alnum:]]._-' )
+. $(find . -name constant_values.sh)
 
-target_repo_url=$1
-target_commit_hash=$2
+experiment_name=$1
+target_repo_url=$2
+target_commit_hash=$3
+
+temp_repo_name=$experiment_name$( echo $(date) $(date +%s%N) | tr -cd '[[:alnum:]]._-' )
 
 travis_login()
 {
@@ -15,9 +29,9 @@ travis_login()
 	spawn travis login
 	set prompt ":|#|\\\$"
 	expect "Username: "
-	send "'$github_username'\r"
-	expect "Password for '$github_username': "
-	send "'$github_password'\r"
+	send "'$result_repo_commiter_name'\r"
+	expect "Password for '$result_repo_commiter_name': "
+	send "'$result_repo_commiter_pass'\r"
 	interact -o -nobuffer -re $prompt return
 	'
 }
@@ -25,25 +39,32 @@ travis_login()
 create_github_repo()
 {
 	expect -c '
-		spawn curl -u "'$github_username'" https://api.github.com/user/repos -d "{\"name\":\"'$temp_repo_name'\"}" > /dev/null
+		spawn curl -u "'$result_repo_commiter_name\
+			'" https://api.github.com/user/repos -d "{\"name\":\"'$temp_repo_name'\"}" > /dev/null
 		set prompt ":|#|\\\$"
 		expect "*?assword*"
-		send "'$github_password'\r"
+		send "'$result_repo_commiter_pass'\r"
 		interact -o -nobuffer -re $prompt return
 	'
 }
 
 make_travis_run()
 {
-	git clone https://github.com/$github_username/$temp_repo_name
-	sed "s%TARGET_RERPOSITORY_URL%$target_repo_url%g" travis_run.sh | sed "s%TARGET_COMMIT_HASH%$target_commit_hash%g" > $temp_repo_name/travis_run.sh
-	cp .travis.yml $temp_repo_name/.travis.yml
+	git clone https://github.com/$result_repo_commiter_name/$temp_repo_name
+
+	sed "s%TARGET_RERPOSITORY_URL%$target_repo_url%g" travis_run.sh |
+		sed "s%SCRIPTS_REPO_URL%$scripts_repo_url%g" travis_run.sh |
+		sed "s%DEFAULT_EXPERIMENT_NAME%$experiment_name%g" travis_run.sh |
+		sed "s%TARGET_COMMIT_HASH%$target_commit_hash%g" > $temp_repo_name/travis_run.sh
+
+	cp the_dot_travis_for_travis_temp_repo.yml $temp_repo_name/.travis.yml
 	cd $temp_repo_name
 	git add .
-	git config --local user.name $github_username
-	git config --local user.email $github_email
-	git config --local user.password $github_password
-	git config remote.origin.url https://$github_username:$github_password@github.com/$github_username/$temp_repo_name.git
+	git config --local user.name $result_repo_commiter_name
+	git config --local user.email $result_repo_commiter_email
+	git config --local user.password $result_repo_commiter_pass
+	git config remote.origin.url \
+		https://$result_repo_commiter_name:$result_repo_commiter_pass@github.com/$result_repo_commiter_name/$temp_repo_name.git
 	git commit -am "run travis"
 	git push origin master
 	cd ..
@@ -75,7 +96,7 @@ main()
 	travis_login
 	create_github_repo
 	sync_travis
-	travis enable -r $github_username/$temp_repo_name
+	travis enable -r $result_repo_commiter_name/$temp_repo_name
 	make_travis_run
 	travis logout
 
