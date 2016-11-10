@@ -21,7 +21,7 @@ experiment_name=$1
 target_repo_url=$2
 target_commit_hash=$3
 
-temp_repo_name=$experiment_name$( echo $(date) $(date +%s%N) | tr -cd '[[:alnum:]]._-' )
+temp_repo_name=$experiment_name"_"$( echo $(date) $(date +%s%N) | tr -cd '[[:alnum:]]._-' )
 
 travis_login()
 {
@@ -39,8 +39,7 @@ travis_login()
 create_github_repo()
 {
 	expect -c '
-		spawn curl -u "'$result_repo_commiter_name\
-			'" https://api.github.com/user/repos -d "{\"name\":\"'$temp_repo_name'\"}" > /dev/null
+		spawn curl -u "'$result_repo_commiter_name'" https://api.github.com/user/repos -d "{\"name\":\"'$temp_repo_name'\"}" > /dev/null
 		set prompt ":|#|\\\$"
 		expect "*?assword*"
 		send "'$result_repo_commiter_pass'\r"
@@ -52,10 +51,10 @@ make_travis_run()
 {
 	git clone https://github.com/$result_repo_commiter_name/$temp_repo_name
 
-	sed "s%TARGET_RERPOSITORY_URL%$target_repo_url%g" travis_run.sh |
-		sed "s%SCRIPTS_REPO_URL%$scripts_repo_url%g" travis_run.sh |
-		sed "s%DEFAULT_EXPERIMENT_NAME%$experiment_name%g" travis_run.sh |
-		sed "s%TARGET_COMMIT_HASH%$target_commit_hash%g" > $temp_repo_name/travis_run.sh
+	sed "s/TARGET_RERPOSITORY_URL/${target_repo_url//\//\\/}/g" travis_run.sh |
+		sed -e "s/SCRIPTS_REPO_URL/${scripts_repo_url//\//\\/}/g" |
+		sed -e "s%DEFAULT_EXPERIMENT_NAME%$experiment_name%g" |
+		sed -e "s%TARGET_COMMIT_HASH%$target_commit_hash%g" > $temp_repo_name/travis_run.sh
 
 	cp the_dot_travis_for_travis_temp_repo.yml $temp_repo_name/.travis.yml
 	cd $temp_repo_name
