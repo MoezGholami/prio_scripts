@@ -6,9 +6,11 @@ however, instead of dynamic time budgetting of Pit (which uses a normal distribu
 we limit time to 4 seconds for each test; because it will take too much time (based on the logs of Travis,
 too much amount of time is spent for timeout cases)
 
-commons-math and commons-lang are run with Java 7
+commons-coll and commons-math and commons-lang are run with Java 7
 commons dbcp is from here not github: http://work@cozy.ece.utexas.edu:2002//home/work/projects/apache-commons/commonsdbcp
 
 experiments are performed on istanbul, xps1, xps2 . cowboy is down! damn.
 
 date 11/19/2016
+
+right now, commons-dbcp is not available
