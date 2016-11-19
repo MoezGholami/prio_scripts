@@ -1,0 +1,14 @@
+ex02:
+
+again run pit against manually written tests for the commits.
+this time, we collect all time out information and all tests which time out against a mutation
+however, instead of dynamic time budgetting of Pit (which uses a normal distribution)
+we limit time to 4 seconds for each test; because it will take too much time (based on the logs of Travis,
+too much amount of time is spent for timeout cases)
+
+commons-math and commons-lang are run with Java 7
+commons dbcp is from here not github: http://work@cozy.ece.utexas.edu:2002//home/work/projects/apache-commons/commonsdbcp
+
+experiments are performed on istanbul, xps1, xps2 . cowboy is down! damn.
+
+date 11/19/2016
