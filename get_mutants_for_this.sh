@@ -78,7 +78,8 @@ send_result()
 	git clone "$result_repo"
 	mv $(find target/pit-reports -name mutations.csv) $results_dir/$result_file_name
     mkdir -p $results_dir/logs
-    mv logs.txt $results_dir/logs/$result_file_name".txt"
+    zip -ry9T logs.txt.zip logs.txt
+    mv logs.txt.zip $results_dir/logs/$result_file_name".txt.zip"
     zip -ry9Tm $results_dir/$result_file_name.zip $results_dir/$result_file_name
 	cd $results_dir
 	git config --local user.name $result_repo_commiter_name
