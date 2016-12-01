@@ -50,7 +50,9 @@ generate_mutation_table()
 	echo "generating mutation table ..."
 	rm -rf target
 	mvn test || echo "test error"
-	mvn org.pitest:pitest-maven:mutationCoverage || echo "error"
+	set +e
+	mvn org.pitest:pitest-maven:mutationCoverage | tee logs.txt
+	set -e
 	echo "done!"
 }
 
@@ -75,12 +77,16 @@ send_result()
 
 	git clone "$result_repo"
 	mv $(find target/pit-reports -name mutations.csv) $results_dir/$result_file_name
+    mkdir -p $results_dir/logs
+    mv logs.txt $results_dir/logs/$result_file_name".txt"
+    zip -ry9Tm $results_dir/$result_file_name.zip $results_dir/$result_file_name
 	cd $results_dir
 	git config --local user.name $result_repo_commiter_name
 	git config --local user.email $result_repo_commiter_email
 	git config --local user.password $result_repo_commiter_pass
 	git config remote.origin.url https://$result_repo_commiter_name:$result_repo_commiter_pass@github.com/Moezgholami/$results_dir.git
-	git add $result_file_name
+	git add $result_file_name".zip"
+    git add logs
 	git commit -am "$result_file_name"
 	git push origin master
 	cd ..
