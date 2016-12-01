@@ -558,6 +558,7 @@
           </targetClasses>
           <targetTests>
             <param>org.apache.*</param>
+            <param>randoop.*</param>
           </targetTests>
           <outputFormats>
             <outputFormat>CSV</outputFormat>

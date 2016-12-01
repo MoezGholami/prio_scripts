@@ -389,6 +389,7 @@ Supported protocols include: Echo, Finger, FTP, NNTP, NTP, POP3(S), SMTP(S), Tel
           </targetClasses>
           <targetTests>
             <param>org.apache.*</param>
+            <param>randoop.*</param>
           </targetTests>
           <outputFormats>
             <outputFormat>CSV</outputFormat>
