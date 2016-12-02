@@ -1,0 +1,7 @@
+running projects against randoop tests
+some of them are not compiling, we are ignoring them. some of them are failing.
+
+the tests are from randoop 50 of milos works
+
+commons-coll and commons-math and commons-lang are run with Java 7
+commons dbcp is from here not github: http://work@cozy.ece.utexas.edu:2002//home/work/projects/apache-commons/commonsdbcp
