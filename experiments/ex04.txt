@@ -1,0 +1,4 @@
+repeat ex03 with autogens-compiled.tgz not randoop.tgz (milos's tests)
+
+commons-coll and commons-math and commons-lang are run with Java 7
+commons dbcp is from here not github: http://work@cozy.ece.utexas.edu:2002//home/work/projects/apache-commons/commonsdbcp
