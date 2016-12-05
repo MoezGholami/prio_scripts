@@ -5,3 +5,7 @@ the tests are from randoop 50 of milos works
 
 commons-coll and commons-math and commons-lang are run with Java 7
 commons dbcp is from here not github: http://work@cozy.ece.utexas.edu:2002//home/work/projects/apache-commons/commonsdbcp
+
+This experiment is failed. because I used randoop.tgz not autogens-compiled.tgz.
+Then I filtered out tests with compile error.
+For instance, for commons-math we had only 2 valid tests. However, logs and results are ready.
