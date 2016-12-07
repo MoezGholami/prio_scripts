@@ -1,0 +1,4 @@
+do the ex03 for evosuite tests which are in 80 directory. We use autogens-compiled.tgz.
+Commons-Lang and Commons-Coll use java 7 so they cannot be used in this experiment.
+Although commons-math should be OK with java 8, we have problems with it. So we won't use commons-math for now because evosuite need java8.
+(actually, we first examined commons-math with evosuite but we got lots of run_errors. according to pit, something is wrong).
