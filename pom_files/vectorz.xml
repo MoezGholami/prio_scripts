@@ -92,6 +92,11 @@
 			<name>Maven Central</name>
 			<url>https://repo.maven.apache.org/maven2/</url>
 		</repository>
+        <repository>
+            <id>EvoSuite</id>
+            <name>EvoSuite Repository</name>
+            <url>http://www.evosuite.org/m2</url>
+        </repository>
 	</repositories>
 
 	<dependencies>
@@ -122,5 +127,11 @@
 			<artifactId>mathz</artifactId>
 			<version>0.3.0</version>
 		</dependency>
+        <dependency>
+            <groupId>org.evosuite</groupId>
+            <artifactId>evosuite-standalone-runtime</artifactId>
+            <version>1.0.3</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>

@@ -206,6 +206,13 @@ limitations under the License.
       </roles>
     </contributor>
   </contributors>
+  <repositories>
+      <repository>
+          <id>EvoSuite</id>
+          <name>EvoSuite Repository</name>
+          <url>http://www.evosuite.org/m2</url>
+      </repository>
+  </repositories>
   <!-- Codec only has test dependencies ATM -->
   <dependencies>
     <dependency>
@@ -219,6 +226,12 @@ limitations under the License.
       <artifactId>commons-lang3</artifactId>
       <version>3.4</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.evosuite</groupId>
+        <artifactId>evosuite-standalone-runtime</artifactId>
+        <version>1.0.3</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
   <properties>
